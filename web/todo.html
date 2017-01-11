@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="en">
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+    <script src="angularjs-social-login.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"
+          integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css"/>
+    <script src="angularjs-social-login.js"></script>
+    <script src="app.js"></script>
+    <script src="alertify.min.js"></script>
+    <link rel="stylesheet" href="alertify.core.css"/>
+    <link rel="stylesheet" href="alertify.default.css"/>
+    <link rel="stylesheet" href="alertify.bootstrap.css"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="listingCtrl" ng-init="getTodos()">
+<nav class="navbar navbar-light customColor navbar-fixed-top">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">SocialToDo</a>
+
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="btn btn-primary navbar-btn" href="myListings.html">Benim Listelerim</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-primary navbar-btn" href="listings.html">Tüm Listeler</a>
+            </li>
+
+            <li class="nav-item pull-xs-right">
+
+                <img ng-src="{{picture}}">
+                <span class="label label-success">Hoşgeldin {{userName}}</span>
+
+                <button type="button" class="btn btn-primary navbar-btn" ng-click="logout()">
+                    Çıkış Yap
+                </button>
+
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid">
+
+
+    <div class="row margin-top-40 margin-left-30">
+
+        <div class="col-md-12 panel panel-info" ng-hide="showComm">
+            <div class="row">
+                <div class="col-md-4">
+
+                    <div class="panel-heading">
+
+                    </div>
+
+                    <div class="panel-body">
+                        <h3><span class="label label-success">{{listingName}}</span></h3>
+
+                        <div class="form-group"><input placeholder="bir şeyler ara..." type="text" ng-model="test"/>
+                        </div>
+                        <div class="form-group"><input type="text" ng-model="todo.todoContent"
+                                                       placeholder="bir şeyler ekle..."/></div>
+
+                        <button ng-click="addTodo(todo)" class="btn btn-primary">İş Ekle</button>
+                        <button ng-click="deleteListings()" class="btn btn-primary">Listeyi Sil</button>
+
+
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4" ng-repeat="todo in todos | filter:test |orderBy:'$index':true">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="label label-default"><cite>Oluşturan:</cite></span>
+                                    <span class="label label-info">{{todo.userName}}</span>
+
+                                    <span ng-if="todo.rateAverage == 0">
+                                        <span class="label label-danger pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                                    <span ng-if="todo.rateAverage > 0 && todo.rateAverage < 2.5">
+                                        <span class="label label-warning pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                                    <span ng-if="todo.rateAverage > 2.5 && todo.rateAverage <=4.5">
+                                        <span class="label label-primary pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                                    <span ng-if="todo.rateAverage > 4.5 && todo.rateAverage <=5">
+                                        <span class="label label-success pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                                </div>
+
+                                <div class="card-block">
+                                    <cite><strong>{{todo.todoContent}}</strong></cite>
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <button class="btn btn-success"
+                                            ng-click="toggle(todo.todoId , todo.todoContent, todo.rateAverage)">Yorum
+                                        Yap
+                                    </button>
+                                    <button class="btn btn-danger" ng-click="deleteTodo(todo.todoId ,todo.userName)">
+                                        Sil
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--       <table>
+
+                       <tr ng-repeat="todo in todos | filter:test">
+
+                           <td><strong></strong></td>
+                           <td></td>
+                           <td></td>
+                           <td>
+
+                           </td>
+                           <td>
+
+                           </td>
+
+
+                       </tr>
+
+                   </table>-->
+
+        </div>
+
+
+    </div>
+    <div class="row margin-top-30 margin-left-30 margin-right-30" id="div1" ng-show="showComm">
+        <div class="col-md-12">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <span class="label label-success">Yorum Yap</span>
+                        <form method="post" class="form-horizontal">
+                            <div class="form-group"><textarea ng-model="comment.commentContent" placeholder="Bu iş hakkında düşüncelerini paylaş"
+                                                              style='width:550px'></textarea></div>
+                            </br>
+
+                            <button ng-click="addComment(comment)" class="btn btn-primary">Kaydet</button>
+                            <button ng-click="toggle2()" class="btn btn-primary">İşlere Dön</button>
+
+                        </form>
+                    </div>
+                    <div class="row margin-top-10">
+                        <fieldset class="rating">
+
+                            <input type="radio" id="star5" name="rating" value="5" ng-model="rate"/><label for="star5">5
+                            yıldız</label>
+                            <input type="radio" id="star4" name="rating" value="4" ng-model="rate"/><label for="star4">4
+                            yıldız</label>
+                            <input type="radio" id="star3" name="rating" value="3" ng-model="rate"/><label for="star3">3
+                            yıldız</label>
+                            <input type="radio" id="star2" name="rating" value="2" ng-model="rate"/><label for="star2">2
+                            yıldız</label>
+                            <input type="radio" id="star1" name="rating" value="1" ng-model="rate"/><label for="star1">1
+                            yıldız</label>
+
+                        </fieldset>
+
+                        <button ng-click="giveRate(rate,todoId)" class="btn btn-success">Puanla</button>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <h3>
+                        <span class="label label-success">{{todoContent}} için yorumlar</span>
+
+
+                        <span ng-if="rateAverage == 0">
+                                        <span class="label label-danger pull-right">Puan: {{rateAverage}}</span>
+                                    </span>
+
+                        <span ng-if="rateAverage > 0 && rateAverage < 2.5">
+                                        <span class="label label-warning pull-right">Puan: {{rateAverage}}</span>
+                                    </span>
+
+                        <span ng-if="rateAverage > 2.5 && rateAverage <=4.5">
+                                        <span class="label label-primary pull-right">Puan: {{rateAverage}}</span>
+                                    </span>
+
+                        <span ng-if="rateAverage > 4.5 && rateAverage <=5">
+                                       <span class="label label-success pull-right">Puan: {{rateAverage}}</span>
+                                    </span>
+                    </h3>
+
+
+                    <div class="card margin-top-05" ng-repeat="comment in comments">
+                        <div class="card-header">
+                            <span class="label label-default">Yorum yapan:</span>
+                            <span class="label label-info">{{comment.userName}}</span>
+                        <div class="card-block">
+                            <p class="card-text">{{ comment.commentContent }}</p>
+                            <button class="btn btn-primary"
+                                    ng-click="deleteComment(comment.commentId,comment.userName)">
+                                Yorumu Sil
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!--<br ng-hide="showComm">-->
+
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>

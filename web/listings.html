@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="en">
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"
+          integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css"/>
+    <script src="alertify.min.js"></script>
+    <link rel="stylesheet" href="alertify.core.css"/>
+    <link rel="stylesheet" href="alertify.default.css"/>
+    <link rel="stylesheet" href="alertify.bootstrap.css"/>
+    <script src="app.js"></script>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <style type="text/css">
+
+
+
+
+
+
+        .ustKisim {
+            position: fixed;
+        }
+
+    </style>
+</head>
+
+<body ng-controller="listingCtrl" ng-init="getListings()">
+
+<nav class="navbar navbar-light customColor navbar-fixed-top">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">SocialToDo</a>
+
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="btn btn-primary navbar-btn" href="myListings.html">Benim Listelerim</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-primary navbar-btn" href="listings.html">Tüm Listeler</a>
+            </li>
+
+            <li class="nav-item pull-xs-right">
+                <img ng-src="{{picture}}">
+                <span class="label label-success">Hoşgeldin {{userName}}</span>
+
+                <button class="btn btn-primary navbar-btn" ng-click="logout()">Çıkış Yap</button>
+
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+
+
+    <div class="row margin-top-40">
+
+        <div class="col-md-4 panel panel-info margin-top-80">
+
+
+            <div class="panel-body ustKisim">
+
+                <input type="text" placeholder="liste ara..." ng-model="test"/></br></br>
+
+
+                <h3>Liste Oluştur</h3>
+
+
+
+                <form method="post" class="form-horizontal">
+
+                    Liste Adı:
+                    <div class="form-group"><input type="text" ng-model="liste.listingName" required/></div>
+
+                    Açıklama:
+                    <div class="form-group"><input type="text" ng-model="liste.listingDesc"/></div>
+
+                    Bana Özel:
+                    <div class="form-group"><input type="checkbox" ng-model="liste.privateList"/></div>
+
+
+                    <div class="form-group"><input class="btn btn-primary" type="submit" value="Ekle"
+                                                   ng-click="addListing(liste)"></div>
+
+
+                </form>
+                <span class="label label-success">{{msg1}}</span>
+                <span class="label label-danger">{{msg2}}</span>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-8">
+
+
+            <div class="row  margin-top-40 content">
+
+
+                <div class="col-md-6" ng-repeat="listing in listings | filter:test |orderBy:'$index':true ">
+
+
+                    <div class="card text-xs-center">
+                        <div class="card-header">
+
+                            <h3><span class="label label-success">{{listing.listingName}}</span></h3>
+                        </div>
+                        <div class="card-block">
+                            <p><cite>{{listing.listingDesc}}</cite></p>
+                           <h4><span class="label label-warning">Oluşturan: {{listing.userName}}</span></h4>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a href="todo.html#?listingId={{listing.listingId}}&listingName={{listing.listingName}}&userName={{listing.userName}}"
+                               class="btn btn-success">Katıl </a>
+                            <button ng-click="deleteListings(listing.listingId , listing.userName)" class="btn btn-danger">Sil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+</html>

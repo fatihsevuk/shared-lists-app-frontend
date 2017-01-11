@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="en">
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+
+
+
+    <script src="app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="alertify.min.js"></script>
+    <link rel="stylesheet" href="alertify.core.css"/>
+    <link rel="stylesheet" href="alertify.default.css"/>
+    <link rel="stylesheet" href="alertify.bootstrap.css"/>
+    <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container-fluid">
+
+    <div class="row text-center margin-top-30 margin-left-30" >
+
+        <div class="col-md-4 col-md-offset-4 panel panel-primary" ng-controller="registerCtrl">
+            <div class="panel-heading">Kayıt olmak için formu doldur.</div>
+            <div class="panel-body">
+
+                <form method="post" class="form-horizontal" name="myForm">
+
+                    Kullanıcı Adı:
+                    <div class="form-group"><input type="text" ng-model="user.userName" required /></div>
+
+
+                    Parola:
+                    <div class="form-group"><input type="password" ng-model="user.password" required/></div>
+
+                    Parola Yeniden:
+                    <div class="form-group"><input type="password" ng-model="user.password2" required/></div>
+
+                    Email:
+                    <div class="form-group"><input type="email"  placeholder="Geçerli bir emil adresi gir" ng-model="user.email" required/></div>
+
+                    <div class="form-group"><input class="btn btn-primary" type="submit" value="Kayıt" ng-click="register(user)"></div>
+
+                </form>
+
+                <h5>yada</h5>
+
+
+                <button  type="button" ng-click="onFBLogin()" class="btn btn-info">Facebook Giriş</button>
+                <a href="#/login" class="btn btn-info">Giriş</a>
+            </div>
+            <div class="panel-footer">
+                <span class="label label-success">{{msg1}}</span>
+                <span class="label label-danger">{{msg2}}</span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+</html>
+
+

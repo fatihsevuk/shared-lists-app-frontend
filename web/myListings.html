@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"
+          integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css"/>
+    <script src="alertify.min.js"></script>
+    <link rel="stylesheet" href="alertify.core.css"/>
+    <link rel="stylesheet" href="alertify.default.css"/>
+    <link rel="stylesheet" href="alertify.bootstrap.css"/>
+    <script src="app.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+
+
+        .ustKisim {
+            position: fixed;
+        }
+
+    </style>
+</head>
+<body ng-controller="listingCtrl" ng-init="getUserPublicListings(); getUserPrivateListings(); getUserTodos(); getUserCommnets();">
+
+<nav class="navbar navbar-light customColor navbar-fixed-top">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">SocialToDo</a>
+
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="btn btn-primary navbar-btn" href="myListings.html">Benim Listelerim</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-primary navbar-btn" href="listings.html">Tüm Listeler</a>
+            </li>
+
+            <li class="nav-item pull-xs-right">
+                <img ng-src="{{picture}}">
+                <span class="label label-success">Hoşgeldin {{userName}}</span>
+
+                <button class="btn btn-primary navbar-btn" ng-click="logout()">Çıkış Yap</button>
+
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container-fluid margin-top-40">
+    <div class="row">
+        <div class="col-md-4 margin-top-80">
+            <div class="ustKisim margin-left-30" >
+                <div class="row margin-top-10">
+                    <button ng-click="toggleCustom1()" class="btn btn-danger btn-block">Bana Özel</button>
+                </div>
+                <div class="row margin-top-10">
+                    <button ng-click="toggleCustom2()" class="btn btn-success btn-block">Herkese Açık</button>
+                </div>
+                <div class="row margin-top-10">
+                    <button ng-click="toggleCustom3()" class="btn btn-warning btn-block">Katıldıklarım</button>
+                </div>
+                <div class="row margin-top-10">
+                    <button ng-click="toggleCustom4()" class="btn btn-info btn-block">Yorumlarım</button>
+                </div>
+                <div class="row margin-top-10">
+                    <input type="text" placeholder="birşeyler ara..." ng-model="test"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div ng-hide="custom1" class="row margin-top-10" >
+                <div class="col-md-6" ng-repeat="listing in userPrivateListings | filter:test |orderBy:'$index':true ">
+                    <div class="card text-xs-center">
+                        <div class="card-header">
+
+                            <h3><span class="label label-success">{{listing.listingName}}</span></h3>
+                        </div>
+                        <div class="card-block">
+                            <p><cite>{{listing.listingDesc}}</cite></p>
+                            <h4><span class="label label-warning">Oluşturan: {{listing.userName}}</span></h4>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a href="todo.html#?listingId={{listing.listingId}}&listingName={{listing.listingName}}&userName={{listing.userName}}"
+                               class="btn btn-success">Katıl </a>
+                            <button ng-click="deleteListings(listing.listingId , listing.userName)" class="btn btn-danger">Sil
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div ng-hide="custom2" class="row margin-top-10">
+
+                <div class="col-md-6" ng-repeat="listing in userPublicListings | filter:test |orderBy:'$index':true ">
+                    <div class="card text-xs-center">
+                        <div class="card-header">
+
+                            <h3><span class="label label-success">{{listing.listingName}}</span></h3>
+                        </div>
+                        <div class="card-block">
+                            <p><cite>{{listing.listingDesc}}</cite></p>
+                            <h4><span class="label label-warning">Oluşturan: {{listing.userName}}</span></h4>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a href="todo.html#?listingId={{listing.listingId}}&listingName={{listing.listingName}}&userName={{listing.userName}}"
+                               class="btn btn-success">Katıl </a>
+                            <button ng-click="deleteListings(listing.listingId , listing.userName)" class="btn btn-danger">Sil
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div ng-hide="custom3" class="row margin-top-10">
+                <div class="col-md-6" ng-repeat="todo in userTodos | filter:test |orderBy:'$index':true ">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="label label-success"><cite>{{todo.listingName}}</cite></span>
+                            <span class="label label-default"><cite>Oluşturan:</cite></span>
+                            <span class="label label-info">{{todo.listingUserName}}</span>
+
+                            <span ng-if="todo.rateAverage == 0">
+                                        <span class="label label-danger pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                            <span ng-if="todo.rateAverage > 0 && todo.rateAverage < 2.5">
+                                        <span class="label label-warning pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                            <span ng-if="todo.rateAverage > 2.5 && todo.rateAverage <=4.5">
+                                        <span class="label label-primary pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                            <span ng-if="todo.rateAverage > 4.5 && todo.rateAverage <=5">
+                                        <span class="label label-success pull-right">Puan: {{todo.rateAverage}}</span>
+                                    </span>
+
+                        </div>
+
+                        <div class="card-block">
+                            <cite><strong>{{todo.todoContent}}</strong></cite>
+
+                        </div>
+
+                        <div class="card-footer">
+
+                            <button class="btn btn-danger" ng-click="deleteTodo(todo.todoId ,todo.userName)">Sil</button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div ng-hide="custom4" class="row margin-top-10">
+                <div class="col-md-6" ng-repeat="comment in userComments | filter:test |orderBy:'$index':true ">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="label label-success"><cite>{{comment.listingName}}</cite></span>
+
+                            <span class="label label-info">{{comment.todoContent}}</span>
+
+
+
+                        </div>
+
+                        <div class="card-block">
+                            <cite><strong>{{comment.commentContent}}</strong></cite>
+
+                        </div>
+
+                        <div class="card-footer">
+
+                            <button class="btn btn-danger" ng-click="deleteComment(comment.commentId,comment.userName)">Yorumu Sil</button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>
