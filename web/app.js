@@ -22,7 +22,7 @@
 
     window.fbAsyncInit = function() {
         FB.init({
-            appId      : '1893758690858617',
+            appId      : '#######git ',
             xfbml      : true,
             version    : 'v2.8',
             status:true
