@@ -22,7 +22,7 @@
 
     window.fbAsyncInit = function() {
         FB.init({
-            appId      : '#######git ',
+            appId      : '1893758690858617',
             xfbml      : true,
             version    : 'v2.8',
             status:true
@@ -74,21 +74,7 @@
     var urlGetUserCommnets='http://localhost:8080/comments1/';
 
 
-    app.controller('homeCtrl', function ($scope, $http) {
-        if (sessionStorage.getItem("currentUserName") != null) {
 
-            $scope.currentUserName = sessionStorage.getItem("currentUserName");
-
-            $scope.logout = function () {
-                console.log("log out metoduna girdi.");
-                sessionStorage.removeItem("currentUserName");
-                window.location.href = "./login.html";
-            }
-
-        } else {
-            window.location.href = "./login.html";
-        }
-    });
 
 
     app.controller('loginCtrl', function ($scope, $http,$location) {
@@ -302,7 +288,7 @@
            alertify.confirm("Çıkış yapmak istediğinden emin misin?" , function (e) {
                if(e){
 
-                   FB.logout(function () {
+                   FB.logout(function (response){
 
                    });
 
